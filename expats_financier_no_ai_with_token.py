@@ -530,11 +530,10 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 
 def main():
-    token = os.environ.get("TELEGRAM_BOT_TOKEN")
-    if not token:
-        raise ValueError("TELEGRAM_BOT_TOKEN not set")
-    
+    token = "8306299902:AAEN6Np299sYAnOkYb14LrcmWpm2YbyeB44"
+
     app = Application.builder().token(token).build()
+
     
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
