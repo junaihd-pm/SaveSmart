@@ -2,7 +2,7 @@
 Expat's Financier Bot - No AI Version
 Simple financial tracking bot for UAE expats
 """
-
+import requests
 import os
 import json
 import logging
@@ -154,6 +154,7 @@ class UserProfile:
         return profile
 
 
+
 class ProfileManager:
     def __init__(self, storage_dir: Path):
         self.storage_dir = storage_dir
@@ -179,6 +180,23 @@ class ProfileManager:
         except Exception as e:
             logger.error(f"Error saving profile: {e}")
 
+GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzevey7XlnQHiiMYLLgO7Abf2wcd7DL77dOsh1xZJFoWx6TvUWBdRtlXXqYVhAu63ku/exec"
+
+def send_to_google_sheets(profile: UserProfile):
+    data = {
+        "user_id": profile.user_id,
+        "name": profile.name,
+        "job": profile.job_position,
+        "income": profile.income,
+        "expense": profile.total_expense,
+        "savings": profile.savings_goal,
+        "emergency": profile.emergency_fund
+    }
+
+    try:
+        requests.post(GOOGLE_SHEET_URL, json=data, timeout=10)
+    except Exception as e:
+        logger.error(f"Google Sheets error: {e}")
 
 profile_manager = ProfileManager(STORAGE_DIR)
 
@@ -278,6 +296,7 @@ async def onboarding_emergency(update: Update, context: ContextTypes.DEFAULT_TYP
         profile.emergency_fund = emergency
         profile.onboarding_completed = True
         profile_manager.save_profile(profile)
+        send_to_google_sheets(profile)
         
         await update.message.reply_text(
             f"🎉 *Done!*\n\n"
