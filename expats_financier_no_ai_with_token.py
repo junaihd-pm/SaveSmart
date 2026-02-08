@@ -1,7 +1,3 @@
-"""
-Expat's Financier Bot - No AI Version
-Simple financial tracking bot for UAE expats
-"""
 
 import os
 import json
