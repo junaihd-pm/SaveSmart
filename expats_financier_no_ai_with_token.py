@@ -561,7 +561,7 @@ def main():
     app.add_handler(conv_handler)
     
     logger.info("Expat's Financier started!")
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
+    app.run_polling(allowed_updates=Update.ALL_TYPES, drop_pending_updates=True)
 
 
 if __name__ == '__main__':
